@@ -73,7 +73,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // Serde types in rustdoc of other crates get linked to here.
-#![doc(html_root_url = "https://docs.rs/serde/1.0.92")]
+#![doc(html_root_url = "https://docs.rs/serde/1.0.98")]
 // Support using Serde without the standard library!
 #![cfg_attr(not(feature = "std"), no_std)]
 // Unstable functionality only if the user asks for it. For tracking and
@@ -90,13 +90,12 @@
     allow(
         // not available in our oldest supported compiler
         checked_conversions,
-        const_static_lifetime,
         empty_enum,
         redundant_field_names,
+        redundant_static_lifetimes,
         // integer and float ser/de requires these sorts of casts
         cast_possible_truncation,
         cast_possible_wrap,
-        cast_precision_loss,
         cast_sign_loss,
         // things are often more readable this way
         cast_lossless,
@@ -212,6 +211,14 @@ mod lib {
 
     #[cfg(range_inclusive)]
     pub use self::core::ops::RangeInclusive;
+
+    #[cfg(all(feature = "std", std_atomic))]
+    pub use std::sync::atomic::{
+        AtomicBool, AtomicI16, AtomicI32, AtomicI8, AtomicIsize, AtomicU16, AtomicU32, AtomicU8,
+        AtomicUsize, Ordering,
+    };
+    #[cfg(all(feature = "std", std_atomic64))]
+    pub use std::sync::atomic::{AtomicI64, AtomicU64};
 
     #[cfg(any(core_duration, feature = "std"))]
     pub use self::core::time::Duration;
