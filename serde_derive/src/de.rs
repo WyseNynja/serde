@@ -20,7 +20,7 @@ pub fn expand_derive_deserialize(input: &syn::DeriveInput) -> Result<TokenStream
         None => return Err(ctxt.check().unwrap_err()),
     };
     precondition(&ctxt, &cont);
-    try!(ctxt.check());
+    ctxt.check()?;
 
     let ident = &cont.ident;
     let params = Parameters::new(&cont);
@@ -145,7 +145,7 @@ impl Parameters {
     /// Type name to use in error messages and `&'static str` arguments to
     /// various Deserializer methods.
     fn type_name(&self) -> String {
-        self.this.segments.last().unwrap().value().ident.to_string()
+        self.this.segments.last().unwrap().ident.to_string()
     }
 }
 
